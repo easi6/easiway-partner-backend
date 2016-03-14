@@ -37,29 +37,29 @@ class SubmissionController
 
   driver: Multiparted (req, res, next) ->
     co ->
-      license_copy_path = moveUploadedFile req.files.license
+      license_copy_path = yield moveUploadedFile req.files.license
       yield db.Submission.create
         type: 1
         name: req.body.name
-        phone: req.body.phone
+        phone: req.body.mobile
         email: req.body.email
-        address: req.body.address
         license_copy: license_copy_path
       res.send ok: true
     .catch (err) ->
-      res.json 500, {message: err.message}
+      res.json 500, message: err.message
 
   partner: (req, res, next) ->
     co ->
       yield db.Submission.create
         type: 0
         name: req.body.name
-        phone: req.body.phone
+        phone: req.body.mobile
         email: req.body.email
-        address: req.body.address
+        company_address: req.body.company_addr
+        company_name: req.body.company_name
       res.send ok: true
     .catch (err) ->
-      res.json 500, {message: err.message}
+      res.json 500, message: err.message
 
 module.exports = new SubmissionController
 

@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) ->
       name: DataTypes.STRING
       phone: DataTypes.STRING
       email: DataTypes.STRING
-      address: DataTypes.STRING
+      company_address: DataTypes.STRING
+      company_name: DataTypes.STRING
       license_copy: DataTypes.STRING
     ,
       underscored: true
