@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) ->
           @Model.name
 
   # mail transporter setup
-  transporter = nodemailer.createTransport "SES", {
+  transporter = nodemailer.createTransport ses {
     accessKeyId: config.aws.accessKeyId
     secretAccessKey: config.aws.secretAccessKey
   }

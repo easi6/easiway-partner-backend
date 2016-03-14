@@ -46,7 +46,7 @@ class SubmissionController
         license_copy: license_copy_path
       res.send ok: true
     .catch (err) ->
-      res.json 500, message: err.message
+      res.status(500).json message: err.message
 
   partner: (req, res, next) ->
     co ->
@@ -59,7 +59,7 @@ class SubmissionController
         company_name: req.body.company_name
       res.send ok: true
     .catch (err) ->
-      res.json 500, message: err.message
+      res.status(500).json message: err.message
 
 module.exports = new SubmissionController
 
