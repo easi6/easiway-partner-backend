@@ -41,8 +41,8 @@ module.exports = (sequelize, DataTypes) ->
       email_html = jade.compileFile("./app/views/private_driver_request.jade")(submission)
 
     param =
-      from: "Easiway <noreply@easi-way.com>"
-      to: "info@easi-way.com"
+      from: config.email.from
+      to: config.email.to
       subject: subject
       html: email_html
 
