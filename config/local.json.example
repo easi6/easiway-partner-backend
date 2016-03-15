@@ -1,0 +1,11 @@
+{
+  "aws": {
+    "accessKeyId":  "XXXX",
+    "secretAccessKey": "YYYY",
+    "region": "us-east-1"
+  },
+  "email": {
+    "from": "whoever <me@me.com>",
+    "to": "you@you.com"
+  }
+}
