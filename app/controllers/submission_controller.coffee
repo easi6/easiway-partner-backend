@@ -44,7 +44,8 @@ class SubmissionController
         phone: ([req.body.hk_phone, req.body.cn_phone].filter (x) -> x?.length > 0).join(" / ")
         email: req.body.email
         license_copy: license_copy_path
-      res.send ok: true
+      res.type('text/html').send "<script>alert('thank you!'); history.go(-1)</script>"
+
     .catch (err) ->
       res.status(500).json message: err.message
 
