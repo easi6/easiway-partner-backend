@@ -37,11 +37,11 @@ class SubmissionController
 
   driver: Multiparted (req, res, next) ->
     co ->
-      license_copy_path = yield moveUploadedFile req.files.license
+      license_copy_path = yield moveUploadedFile req.files?.license
       yield db.Submission.create
         type: 1
         name: req.body.name
-        phone: req.body.mobile
+        phone: ([req.body.hk_phone, req.body.cn_phone].filter (x) -> x?.length > 0).join(" / ")
         email: req.body.email
         license_copy: license_copy_path
       res.send ok: true
