@@ -9,6 +9,7 @@
     "co": "^4.6.0",
     "config": "^1.19.0",
     "connect-multiparty": "^2.0.0",
+    "cors": "^2.7.1",
     "express": "^4.13.4",
     "glob": "^7.0.3",
     "jade": "^1.11.0",

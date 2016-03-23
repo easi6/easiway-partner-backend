@@ -1,5 +1,6 @@
 glob = require 'glob'
 path = require 'path'
+cors = require 'cors'
 
 module.exports = (router) ->
   controllers = {}
@@ -37,4 +38,4 @@ module.exports = (router) ->
 
     router.post "/submit/driver",  R("submission#driver")
     router.post "/submit/partner", R("submission#partner")
-    router.post "/submit/corp", R("submission#corp")
+    router.post "/submit/corp", cors(), R("submission#corp")
