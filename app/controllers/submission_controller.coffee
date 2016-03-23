@@ -4,6 +4,11 @@ Promise = require 'bluebird'
 moment = require 'moment'
 co = require 'co'
 path = require 'path'
+request = require 'request'
+request = request.defaults(jar: true)
+
+getRequest = Promise.promisify request.get
+postRequest = Promise.promisify request.post
 
 class SubmissionController
   # helper method
@@ -62,7 +67,27 @@ class SubmissionController
     .catch (err) ->
       res.status(500).json message: err.message
 
+  corp: (req, res, next) ->
+    co ->
+      response = yield getRequest "#{config.api.host}/corporate/signup_csrf"
+      csrftoken = response.body
+
+      params =
+        locale: req.body.prefLang
+        sz_addresses: ""
+        hk_addresses: ""
+        website: req.body.companyWeb
+        business_name: req.body.companyName
+        email: req.body.delegateEmail
+        phone: req.body.delegatePhone
+        name: req.body.delegateName
+
+      [response, body] = postRequest "#{config.api.host}/corporate/signup_request?_csrf=#{csrftoken}", form: params
+      #res.type("application/json").send body
+      res.send ok: true
+    .catch (err) ->
+      res.status(500).json message: err.message
+
 module.exports = new SubmissionController
 
 # vim: set ts=2 sw=2 :
-

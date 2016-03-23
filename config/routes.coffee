@@ -37,3 +37,4 @@ module.exports = (router) ->
 
     router.post "/submit/driver",  R("submission#driver")
     router.post "/submit/partner", R("submission#partner")
+    router.post "/submit/corp", R("submission#corp")
