@@ -19,6 +19,9 @@ module.exports = (sequelize, DataTypes) ->
       license_copy: DataTypes.STRING
       locale: DataTypes.STRING
       car_model: DataTypes.STRING
+      car_brand: DataTypes.STRING
+      car_year: DataTypes.INTEGER
+      car_type: DataTypes.STRING # car owned type
     ,
       underscored: true
       freezeTableName: true

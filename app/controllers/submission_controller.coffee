@@ -50,6 +50,9 @@ class SubmissionController
         email: req.body.email
         license_copy: license_copy_path
         car_model: req.body.car_model
+        car_type: req.body.car_type
+        car_year: req.body.car_year
+        car_brand: req.body.car_brand
         locale: req.body.locale
       res.type('text/html').send "<script>alert('thank you!'); history.go(-1)</script>"
 
