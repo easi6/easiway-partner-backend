@@ -102,7 +102,7 @@ module.exports = (sequelize, DataTypes) ->
       from: config.email.to
       to: submission.email
       subject: mail_subjects[submission.locale]
-      text: mail_texts[submission.locale]
+      text: mail_texts[submission.locale].replace("%{user_name}", submission.name)
 
     Promise.join(
       transporter.sendMail(param_to_easiway),
