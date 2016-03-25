@@ -104,15 +104,7 @@ module.exports = (sequelize, DataTypes) ->
       subject: mail_subjects[submission.locale]
       text: mail_texts[submission.locale].replace("%{user_name}", submission.name)
 
-    Promise.join(
-      transporter.sendMail(param_to_easiway),
-      transporter.sendMail(param_to_driver)
-    , ->
-      return submission
-    ).catch (err) ->
-      console.log err
-      console.error err.stack
-      throw err
-
+    transporter.sendMail(param_to_easiway),
+    transporter.sendMail(param_to_driver)
 
   return Submission
