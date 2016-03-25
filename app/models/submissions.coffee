@@ -37,6 +37,53 @@ module.exports = (sequelize, DataTypes) ->
     secretAccessKey: config.aws.secretAccessKey
   }
 
+  # mail text to drivers
+  mail_subjects =
+    zh_hant: "感謝您申請易路平台司機"
+    zh_hans: "感谢您申请易路平台司机"
+    en: "Thank you for applying to be an Easiway driver"
+
+  mail_texts =
+    zh_hant: """
+    尊敬的%{user_name}，
+    我是易路的Euna!
+
+    感謝您申請成為易路平台的私人司機。
+
+    這需要一些時間，但我們會努力工作，讓您盡快加入我們，成為我們的合作夥伴！
+
+    我們會在六月給您最新的答復。
+
+    您誠摯的，
+    Euna
+    """
+    zh_hans: """
+    尊敬的%{user_name}，
+    我是易路的Euna!
+
+    感谢您申请成为易路平台的私人司机。
+
+    这需要一些时间，但我们会努力工作，让您尽快加入我们，成为我们的合作伙伴！
+
+    我们会在六月给您最新的答复。
+
+    您诚挚的，
+    Euna
+    """
+    en: """
+    Dear %{user_name},
+    My name is Euna of Easiway!
+
+    Thank you for applying as a private driver for Easiway.
+
+    This may take a while but we are working hard to let you drive with us as soon as possible!
+
+    We will give you an update in June.
+
+    Best,
+    Euna
+    """
+
   Submission.afterCreate (submission, options) ->
     if submission.type == 0
       subject = "Partner company request submission"
@@ -45,15 +92,25 @@ module.exports = (sequelize, DataTypes) ->
       subject = "Private driver request submission"
       email_html = jade.compileFile("./app/views/private_driver_request.jade")(submission)
 
-    param =
+    param_to_easiway =
       from: config.email.from
       to: config.email.to
       subject: subject
       html: email_html
 
-    transporter.sendMail param, (err, info) ->
-      if err?
-        return console.dir err
-      console.dir info
+    mail_text = mail_texts[submission.locale]
+    param_to_driver =
+      from: config.email.to
+      to: submission.email
+      subject: mail_subjects[submission.locale]
+      text: mail_text
+
+    sendmail = Promise.promisify transporter.sendMail, transporter
+
+    Promise.join
+      sendmail(param_to_easiway),
+      sendmail(param_to_driver)
+    , ->
+      return submission
 
   return Submission
