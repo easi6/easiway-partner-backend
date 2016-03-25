@@ -98,19 +98,21 @@ module.exports = (sequelize, DataTypes) ->
       subject: subject
       html: email_html
 
-    mail_text = mail_texts[submission.locale]
     param_to_driver =
       from: config.email.to
       to: submission.email
       subject: mail_subjects[submission.locale]
-      text: mail_text
+      text: mail_texts[submission.locale]
 
-    sendmail = Promise.promisify transporter.sendMail, transporter
-
-    Promise.join
-      sendmail(param_to_easiway),
-      sendmail(param_to_driver)
+    Promise.join(
+      transporter.sendMail(param_to_easiway),
+      transporter.sendMail(param_to_driver)
     , ->
       return submission
+    ).catch (err) ->
+      console.log err
+      console.error err.stack
+      throw err
+
 
   return Submission
