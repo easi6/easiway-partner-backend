@@ -84,7 +84,7 @@ module.exports = (sequelize, DataTypes) ->
     Euna
     """
 
-  Submission.afterCreate (submission, options) ->
+  Submission.afterCreate (submission, options, done) ->
     if submission.type == 0
       subject = "Partner company request submission"
       email_html = jade.compileFile("./app/views/partner_company_request.jade")(submission)
@@ -104,7 +104,8 @@ module.exports = (sequelize, DataTypes) ->
       subject: mail_subjects[submission.locale]
       text: mail_texts[submission.locale].replace("%{user_name}", submission.name)
 
-    transporter.sendMail(param_to_easiway),
+    transporter.sendMail(param_to_easiway)
     transporter.sendMail(param_to_driver)
+    done()
 
   return Submission
