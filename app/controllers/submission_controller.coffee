@@ -43,6 +43,16 @@ class SubmissionController
   driver: Multiparted (req, res, next) ->
     co ->
       license_copy_path = yield moveUploadedFile req.files?.license
+
+      # locale sanitize
+      locale = req.body.locale.replace("-", "_").toLowerCase()
+      if locale.indexOf("hans") >= 0 || locale.indexOf("cn") >= 0
+        locale = "zh_hans"
+      else if locale.indexOf("hant") >= 0 || locale.indexOf("hk") >= 0
+        locale = "zh_hant"
+      else
+        locale = "en"
+
       yield db.Submission.create
         type: 1
         name: req.body.name
@@ -53,7 +63,7 @@ class SubmissionController
         car_type: req.body.car_type
         car_year: req.body.car_year
         car_brand: req.body.car_brand
-        locale: req.body.locale
+        locale: locale
       res.type('text/html').send "<script>alert('thank you!'); history.go(-1)</script>"
 
     .catch (err) ->
