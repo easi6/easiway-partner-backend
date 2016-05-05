@@ -134,7 +134,7 @@ class SubmissionController
       csv_row = CSV.stringify row
 
       fd = yield openFile path.join(RootPath, "rides_submission.csv"), 'a'
-      yield writeFile(fd, csv_row + "\n")
+      yield writeFile(fd, csv_row)
       yield closeFile(fd)
 
       res.type('text/html').send "<script>alert('Thank you for your participation'); window.location='http://rides.easi-way.com';</script>"
