@@ -6,12 +6,27 @@ co = require 'co'
 path = require 'path'
 request = require 'request'
 request = request.defaults(jar: true)
+mkdirp = require 'mkdirp'
 
 getRequest = Promise.promisify request.get
 postRequest = Promise.promisify request.post
 
+CSV = require('csv-string')
+
+fs = require('fs')
+openFile = Promise.promisify fs.open, fs
+closeFile = Promise.promisify fs.close, fs
+writeFile = Promise.promisify fs.write, fs
+
 class SubmissionController
   # helper method
+  randomToken = (len=8) ->
+    chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    charlen = chars.length
+    getRandomInt = (min, max) ->
+        Math.floor(Math.random() * (max - min + 1)) + min
+    ([0...len].map () -> chars[getRandomInt(0, charlen - 1)]).join("")
+
   moveUploadedFile = Promise.method (obj, dest, make_thumb = true, crop_to_square = true) ->
     # obj validation check
     if obj? && typeof obj == 'string' # path를 바로 넘겨준것
@@ -31,7 +46,7 @@ class SubmissionController
       # 올라온 파일이면 directory는 uploads/14/7/27/14/[randomhex]_1406438508.[ext]
       now = new Date()
       dir = path.join RootPath, "uploads", "#{now.getYear()-100}", "#{now.getMonth()+1}", "#{now.getDate()}", "#{now.getHours()}"
-      dest = path.join dir, "#{utils.randomToken()}_#{now.getTime()}#{path.extname(obj.path)}"
+      dest = path.join dir, "#{randomToken()}_#{now.getTime()}#{path.extname(obj.path)}"
       promise = if fs.existsSync(dir) then Promise.resolve() else Promise.promisify(mkdirp)(dir)
 
     promise.then () ->
@@ -100,6 +115,29 @@ class SubmissionController
       [response, body] = postRequest "#{config.api.host}/corporate/signup_request?_csrf=#{csrftoken}", form: params
       #res.type("application/json").send body
       res.send ok: true
+    .catch (err) ->
+      res.status(500).json message: err.message
+
+  # this is for ride conference
+  rides: Multiparted (req, res, next) ->
+    co ->
+      pitch_deck_path = yield moveUploadedFile req.files?.pitch_deck
+
+      #add csv row
+      row = [
+        req.body.service.name, req.body.service.url,
+        req.body.company.name, req.body.company.founded, req.body.company.funding,
+        req.body.explain.text, pitch_deck_path,
+        req.body.contact.name, req.body.contact.email
+      ]
+
+      csv_row = CSV.stringify row
+
+      fd = yield openFile path.join(RootPath, "rides_submission.csv"), 'a'
+      yield writeFile(fd, csv_row + "\n")
+      yield closeFile(fd)
+
+      res.type('text/html').send "<script>alert('Thank you for your participation'); window.location='http://rides.easi-way.com';</script>"
     .catch (err) ->
       res.status(500).json message: err.message
 
