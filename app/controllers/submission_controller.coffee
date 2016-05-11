@@ -137,7 +137,7 @@ class SubmissionController
       yield writeFile(fd, csv_row)
       yield closeFile(fd)
 
-      res.type('text/html').send "<script>alert('Thank you for your participation'); window.location='http://rides.easi-way.com';</script>"
+      res.redirect 'http://rides.easi-way.com/after_apply.html#thankyou'
     .catch (err) ->
       res.status(500).json message: err.message
 

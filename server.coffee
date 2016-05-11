@@ -3,6 +3,7 @@ path = require 'path'
 express = require 'express'
 config = require 'config'
 glob = require 'glob'
+serveStatic = require 'serve-static'
 router = express.Router()
 
 # expose root path for future usage
@@ -17,6 +18,7 @@ app.use bodyparser.json()
 app.set "views", "./app/views"
 app.set "view engine", "jade"
 app.engine "jade", require("jade").__express
+app.use '/uploads', serveStatic './uploads'
 
 # load models
 db = require './app/models'

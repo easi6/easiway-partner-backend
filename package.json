@@ -21,6 +21,7 @@
     "nodemailer-ses-transport": "^1.3.0",
     "request": "^2.69.0",
     "sequelize": "^3.19.3",
+    "serve-static": "^1.10.2",
     "sqlite3": "^3.1.1"
   },
   "main": "server.coffee",
