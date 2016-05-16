@@ -7,6 +7,9 @@ path = require 'path'
 request = require 'request'
 request = request.defaults(jar: true)
 mkdirp = require 'mkdirp'
+nodemailer = require('nodemailer')
+ses = require('nodemailer-ses-transport')
+jade = require 'jade'
 
 getRequest = Promise.promisify request.get
 postRequest = Promise.promisify request.post
@@ -17,6 +20,12 @@ fs = require('fs')
 openFile = Promise.promisify fs.open, fs
 closeFile = Promise.promisify fs.close, fs
 writeFile = Promise.promisify fs.write, fs
+
+# mail transporter setup
+transporter = nodemailer.createTransport ses {
+  accessKeyId: config.aws.accessKeyId
+  secretAccessKey: config.aws.secretAccessKey
+}
 
 class SubmissionController
   # helper method
@@ -115,6 +124,28 @@ class SubmissionController
       [response, body] = postRequest "#{config.api.host}/corporate/signup_request?_csrf=#{csrftoken}", form: params
       #res.type("application/json").send body
       res.send ok: true
+    .catch (err) ->
+      res.status(500).json message: err.message
+
+  inquiry: (req, res, next) ->
+    co ->
+      submission =
+        name: req.body.name
+        email: req.body.email
+        content: req.body.content
+      email_html = jade.compileFile("./app/views/homepage_inquiry.jade")(submission)
+
+      params =
+        from: config.email.from
+        to: config.email.to
+        subject: "[easiway] geteasiway.com support 문의메일"
+        html: email_html
+
+      setTimeout ->
+        transporter.sendMail(params)
+      , 0
+
+      res.type('text/html').send "<script>alert('Thank you for your contact'); window.location='http://geteasiway.com/support';</script>"
     .catch (err) ->
       res.status(500).json message: err.message
 

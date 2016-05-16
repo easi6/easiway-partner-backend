@@ -40,3 +40,4 @@ module.exports = (router) ->
     router.post "/submit/partner", R("submission#partner")
     router.post "/submit/corp", cors(), R("submission#corp")
     router.post "/submit/rides", R("submission#rides")
+    router.post "/submit/inquiry", R("submission#inquiry")
