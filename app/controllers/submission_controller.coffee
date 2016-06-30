@@ -132,6 +132,7 @@ class SubmissionController
       submission =
         name: req.body.name
         email: req.body.email
+        phone: req.body.phone
         content: req.body.content
       email_html = jade.compileFile("./app/views/homepage_inquiry.jade")(submission)
 
