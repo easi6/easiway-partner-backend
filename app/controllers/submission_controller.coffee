@@ -93,6 +93,29 @@ class SubmissionController
     .catch (err) ->
       res.status(500).json message: err.message
 
+  driver_requests: (req, res, next) ->
+    co ->
+      per_page = parseInt(req.query.per_page) || 20
+      page = parseInt(req.query.page) || 1
+
+      results = yield db.Submission.findAndCountAll
+        where:
+          type: 1
+        limit: per_page
+        offset: (page-1)*per_page
+
+      driver_requests = results.rows
+      total_count = results.count
+      total_page = Math.ceil results.count / per_page
+
+      res.send {
+        driver_requests: driver_requests,
+        total_count: total_count, total_page: total_page
+      }
+
+    .catch (err) ->
+      res.status(500).json message: err.message
+
   partner: (req, res, next) ->
     co ->
       yield db.Submission.create

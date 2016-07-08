@@ -41,3 +41,10 @@ module.exports = (router) ->
     router.post "/submit/corp", cors(), R("submission#corp")
     router.post "/submit/rides", R("submission#rides")
     router.post "/submit/inquiry", R("submission#inquiry")
+
+    auth = require('http-auth')
+    basic = auth.basic
+      realm: "easi6 requests",
+      file: "#{RootPath}/.htpasswd"
+
+    router.get  "/driver_requests", auth.connect(basic), R("submission#driver_requests")
