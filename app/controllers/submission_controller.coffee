@@ -103,6 +103,7 @@ class SubmissionController
           type: 1
         limit: per_page
         offset: (page-1)*per_page
+        order: [["id", "DESC"]]
 
       driver_requests = results.rows
       total_count = results.count
