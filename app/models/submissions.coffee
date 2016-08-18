@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) ->
 
   mail_texts =
     zh_hant: """
-   尊敬的%{user_name}，
+    尊敬的%{user_name}，
     易路團隊歡迎您！
     感謝您申請成為易路平台的私人司機。
     如果有任何的更新變動，我們會儘快通知您。
@@ -63,10 +63,10 @@ module.exports = (sequelize, DataTypes) ->
     易路团队
     """
     en: """
- Dear %{user_name},
+    Dear %{user_name},
     This is Easiway!
     Thank you for applying as a private driver for Easiway.
-    We will let you know if there is an update. 
+    We will let you know if there is an update.
     
     Best,
     Easiway Team
