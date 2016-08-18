@@ -45,43 +45,31 @@ module.exports = (sequelize, DataTypes) ->
 
   mail_texts =
     zh_hant: """
-    尊敬的%{user_name}，
-    我是易路的Euna!
-
+   尊敬的%{user_name}，
+    易路團隊歡迎您！
     感謝您申請成為易路平台的私人司機。
-
-    這需要一些時間，但我們會努力工作，讓您盡快加入我們，成為我們的合作夥伴！
-
-    我們會在六月給您最新的答復。
-
-    您誠摯的，
-    Euna
+    如果有任何的更新變動，我們會儘快通知您。
+    
+    謹致最好的問候！
+    易路團隊
     """
     zh_hans: """
     尊敬的%{user_name}，
-    我是易路的Euna!
-
+    易路团队欢迎您！
     感谢您申请成为易路平台的私人司机。
-
-    这需要一些时间，但我们会努力工作，让您尽快加入我们，成为我们的合作伙伴！
-
-    我们会在六月给您最新的答复。
-
-    您诚挚的，
-    Euna
+    如果有任何的更新变动，我们会尽快通知您。
+    
+    谨致最好的问候！
+    易路团队
     """
     en: """
-    Dear %{user_name},
-    My name is Euna of Easiway!
-
+ Dear %{user_name},
+    This is Easiway!
     Thank you for applying as a private driver for Easiway.
-
-    This may take a while but we are working hard to let you drive with us as soon as possible!
-
-    We will give you an update in June.
-
+    We will let you know if there is an update. 
+    
     Best,
-    Euna
+    Easiway Team
     """
 
   Submission.afterCreate (submission, options, done) ->
