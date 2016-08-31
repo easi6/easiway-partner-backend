@@ -163,7 +163,7 @@ class SubmissionController
       params =
         from: config.email.from
         to: config.email.to
-        subject: "[Easiway] Customer Inquiry via Support webpage"
+        subject: "[Easiway] Thank You for Your Inquiry via Support Webpage."
         html: email_html
 
       setTimeout ->
