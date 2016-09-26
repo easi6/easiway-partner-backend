@@ -137,7 +137,7 @@ class SubmissionController
 
       params =
         locale: req.body.prefLang
-        sz_addresses: ""
+        sz_addresses: req.body.companyAddress
         hk_addresses: ""
         website: req.body.companyWeb
         business_name: req.body.companyName
