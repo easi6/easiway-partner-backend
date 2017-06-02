@@ -184,16 +184,17 @@ class SubmissionController
         req.body.service.name, req.body.service.url,
         req.body.company.name, req.body.company.founded, req.body.company.funding,
         req.body.explain.text, pitch_deck_path,
-        req.body.contact.name, req.body.contact.email
+        req.body.contact.name, req.body.contact.email, req.body.contact.phone,
+        req.body.contact.im, req.body.contact.memo
       ]
 
       csv_row = CSV.stringify row
 
-      fd = yield openFile path.join(RootPath, "rides_submission.csv"), 'a'
+      fd = yield openFile path.join(RootPath, "rides_submission_2017.csv"), 'a'
       yield writeFile(fd, csv_row)
       yield closeFile(fd)
 
-      res.redirect 'http://rides.easi-way.com/after_apply.html#thankyou'
+      res.redirect 'http://startuprides.geteasiway.com/after_apply.html#thankyou'
     .catch (err) ->
       res.status(500).json message: err.message
 
